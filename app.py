@@ -144,7 +144,7 @@ def get_data():
     for game in top_games:
         app_id = game.get('appid')
         rank = game.get('rank')
-        concurrent_players = game.get('concurrent_in_game', 0)
+        concurrent_players = game.get('concurrent_players', 0)
         
         # Fetch game details
         details = fetch_game_details(app_id)
@@ -185,3 +185,4 @@ def health_check():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
