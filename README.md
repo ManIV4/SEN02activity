@@ -122,8 +122,8 @@ See `requirements.txt`:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-team/steam-dashboard.git
-cd steam-dashboard
+git clone https://github.com/ManIV4/SEN02activity.git
+cd SEN02activity
 ```
 
 ### 2. Install Python Dependencies
@@ -552,4 +552,5 @@ SOFTWARE.
 **Built with ❤️ by the Steam Dashboard Team**
 
 *Last Updated: February 2026*
+
 
