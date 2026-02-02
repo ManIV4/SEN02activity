@@ -273,8 +273,8 @@ Reset countdown to 60
 
 ---
 
-**Designed by:** [Your Name]
-**Date:** [Today's Date]
+**Designed by:** [Dalusung, Carlo Glenn F.]
+**Date:** [02/02/2026]
 **Tools Used:** HTML5, CSS3, Vanilla JavaScript
 ```
 
