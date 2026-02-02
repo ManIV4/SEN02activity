@@ -25,8 +25,12 @@ def fetch_top_games(limit=10):
         data = response.json()
         
         if 'response' in data and 'ranks' in data['response']:
-            games = data['response']['ranks'][:limit]
-            return games
+            # Get the raw ranks from Steam
+            raw_games = data['response']['ranks'][:limit]
+            for game in raw_games:
+                # IMPORTANT: Steam uses 'peak_in_game' as the key for current players
+                game['concurrent_players'] = game.get('peak_in_game', 0)
+            return raw_games
         return []
     except Exception as e:
         print(f"Error fetching top games: {e}")
@@ -102,9 +106,12 @@ def analyze_trends(games_data):
     """
     genres = []
     categories = []
-    total_players += game.get('concurrent_players', 0)
+    total_players = 0
     
     for game in games_data:
+        # Sum player counts using the correct key from our enriched list
+        total_players += game.get('concurrent_players', 0)
+
         if 'details' in game and game['details']:
             details = game['details']
             
@@ -115,9 +122,6 @@ def analyze_trends(games_data):
             # Extract categories
             if 'categories' in details:
                 categories.extend([c['description'] for c in details['categories']])
-        
-        # Sum player counts
-        total_players += game.get('concurrent_in_game', 0)
     
     # Get top genres and categories
     top_genres = Counter(genres).most_common(5)
@@ -144,6 +148,7 @@ def get_data():
     for game in top_games:
         app_id = game.get('appid')
         rank = game.get('rank')
+        # This now pulls the 'peak_in_game' data we mapped in fetch_top_games
         concurrent_players = game.get('concurrent_players', 0)
         
         # Fetch game details
@@ -185,5 +190,3 @@ def health_check():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
