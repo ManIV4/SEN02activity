@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Game Trends Dashboard</title>
+    <style>
+        /* DESIGN PHILOSOPHY: Steam-Inspired Dark UI */
+        :root {
+            --steam-blue: #66c0f4;
+            --dark-navy: #1b2838;
+            --darker-navy: #2a475e;
+            --light-gray: #c7d5e0;
+            --positive: #5cb85c;
+            --mixed: #f0ad4e;
+            --negative: #d9534f;
+        }
+
+        body {
+            background-color: var(--dark-navy);
+            color: var(--light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { color: var(--steam-blue); font-size: 2.5em; margin-bottom: 5px; }
+
+        /* GRID SYSTEM for Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--darker-navy);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(102, 192, 244, 0.1);
+        }
+
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--steam-blue); }
+
+        .stat-value { font-size: 2em; font-weight: bold; color: white; }
+
+        /* GAME CARDS */
+        .game-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .game-card {
+            background: rgba(42, 71, 94, 0.6);
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--steam-blue);
+        }
+
+        .sentiment-bar {
+            width: 100px;
+            height: 10px;
+            background: #121a24;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .sentiment-fill { height: 100%; transition: width 0.5s ease; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎮 Steam Game Trends Dashboard</h1>
+        <p>Live sentiment analysis and trends | Auto-refresh: <span id="timer">60</span>s</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div>Total Players Online</div>
+            <div id="total-players" class="stat-value">Loading...</div>
+        </div>
+        </div>
+
+    <div class="game-list" id="game-container">
+        </div>
+
+    <script>
+        // AUTO-REFRESH LOGIC
+        let timeLeft = 60;
+        const timerElement = document.getElementById('timer');
+
+        function updateCountdown() {
+            timeLeft--;
+            timerElement.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                fetchData();
+                timeLeft = 60;
+            }
+        }
+
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+                renderUI(data);
+            } catch (err) {
+                console.error("Failed to fetch data", err);
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
