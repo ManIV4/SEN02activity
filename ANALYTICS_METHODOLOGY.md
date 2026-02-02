@@ -62,6 +62,7 @@ Top Genres:
 3. RPG (4 games)
 4. Strategy (3 games)
 5. Adventure (2 games)
+
 Top Categories:
 1. Multiplayer (9 games)
 2. PvP (7 games)
