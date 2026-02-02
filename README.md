@@ -90,10 +90,10 @@ This project is a collaborative effort to create a Python web application hosted
 
 | Role | Name | Responsibilities |
 |------|------|------------------|
-| **Team Lead & DevOps** | [Person 1] | Git management, deployment, Apache config |
-| **Backend Developer** | [Person 2] | Flask app, API integration, endpoints |
-| **Data Analyst** | [Person 3] | Sentiment analysis, trend analysis, algorithms |
-| **Frontend Developer** | [Person 4] | HTML/CSS/JS, dashboard UI, auto-refresh |
+| **Team Lead & DevOps** | Roman IV Canlas | Git management, deployment, Apache config |
+| **Backend Developer** | Emmanuel Sagcal | Flask app, API integration, endpoints |
+| **Data Analyst** | Robert Benj Manuel | Sentiment analysis, trend analysis, algorithms |
+| **Frontend Developer** | Carlo Glenn Dalusung | HTML/CSS/JS, dashboard UI, auto-refresh |
 
 ## 📦 Prerequisites
 
@@ -548,23 +548,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 🙏 Acknowledgments
-
-- **Steam**: For providing free public APIs
-- **Flask Team**: For the excellent Python web framework
-- **Apache Foundation**: For the robust web server
-- **Our Instructor**: For the project guidance
-- **Our Team**: For collaboration and hard work!
-
-## 📞 Support
-
-For questions or issues:
-- Create an issue in this repository
-- Contact team lead: [email]
-- Refer to `TEAM_WORKFLOW.md` for detailed documentation
-
----
 
 **Built with ❤️ by the Steam Dashboard Team**
 
 *Last Updated: February 2026*
+
