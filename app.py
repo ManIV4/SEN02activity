@@ -102,7 +102,7 @@ def analyze_trends(games_data):
     """
     genres = []
     categories = []
-    total_players = 0
+    total_players += game.get('concurrent_players', 0)
     
     for game in games_data:
         if 'details' in game and game['details']:
@@ -185,4 +185,5 @@ def health_check():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
 
