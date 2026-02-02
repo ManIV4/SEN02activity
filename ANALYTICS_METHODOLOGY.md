@@ -1,15 +1,16 @@
+```markdown
 # Analytics Methodology - Person 3
 
 ## Sentiment Analysis Algorithm
 
 ### Input:
 - List of Steam user reviews
-- Each review has 'voted_up' (boolean): True = positive, False = negative
+- Each review has `voted_up` (boolean): True = positive, False = negative
 
 ### Process:
 1. Count total reviews
 2. Count positive reviews (where voted_up = True)
-3. Calculate ratio: (positive_count / total_count) x 100
+3. Calculate ratio: (positive_count / total_count) × 100
 
 ### Output Categories:
 | Ratio | Label |
@@ -22,10 +23,12 @@
 | <40% | Very Negative |
 
 ### Example Calculation:
-Sample: 20 reviews 
+```
+Sample: 20 reviews
 Positive: 16 reviews
-Ratio: (16/20) x 100 = 80%
+Ratio: (16/20) × 100 = 80%
 Result: "Overwhelmingly Positive"
+```
 
 ### Why This Works:
 - Aligns with Steam's own review system
@@ -56,18 +59,21 @@ Result: "Overwhelmingly Positive"
 - Top 5 categories with occurrence count
 
 ### Example Results:
+```
 Top Genres:
 1. Action (8 games)
 2. Shooter (6 games)
 3. RPG (4 games)
 4. Strategy (3 games)
 5. Adventure (2 games)
+
 Top Categories:
 1. Multiplayer (9 games)
 2. PvP (7 games)
 3. Co-op (5 games)
 4. Single-player (4 games)
 5. Steam Achievements (8 games)
+```
 
 ### Insights:
 - Shows which game types are currently popular
@@ -104,5 +110,6 @@ Top Categories:
 All calculations verified manually.
 
 ---
-**Analyzed by:** Robert Benj S. Manuel
-**Date:** February 02, 2026
+**Analyzed by:** [Your Name]
+**Date:** [Today's Date]
+```
