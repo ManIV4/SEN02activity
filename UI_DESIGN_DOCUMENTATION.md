@@ -25,5 +25,5 @@
 * **Live Updates**: JavaScript fetches data every 60 seconds without a page reload.
 
 ---
-**Designed by**: [Your Name]
+**Designed by**: Dalusung Carlo Glenn F
 **Date**: February 2026
