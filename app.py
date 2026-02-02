@@ -16,12 +16,10 @@ def fetch_top_games(limit=10):
         if 'response' in data and 'ranks' in data['response']:
             raw_games = data['response']['ranks'][:limit]
             for game in raw_games:
-                # Fix: Map Steam's 'peak_in_game' to 'concurrent_players'
                 game['concurrent_players'] = game.get('peak_in_game', 0)
             return raw_games
         return []
-    except Exception as e:
-        return []
+    except: return []
 
 def fetch_game_details(app_id):
     try:
@@ -90,6 +88,10 @@ def get_data():
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'total_games': len(enriched_games)
     })
+
+@app.route('/api/health')
+def health_check():
+    return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
