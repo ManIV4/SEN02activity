@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steam Game Trends Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+            color: #c7d5e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #66c0f4;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .last-updated {
+            color: #8f98a0;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(102, 192, 244, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 192, 244, 0.5);
+        }
+
+        .stat-label {
+            color: #8f98a0;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            color: #66c0f4;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .games-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #66c0f4;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .game-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(102, 192, 244, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: #66c0f4;
+            transform: translateX(5px);
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .game-rank {
+            background: #66c0f4;
+            color: #1b2838;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .game-name {
+            flex: 1;
+            font-size: 1.3em;
+            color: #fff;
+            margin-left: 15px;
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .game-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .game-stat-label {
+            color: #8f98a0;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .game-stat-value {
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .sentiment-positive {
+            color: #5cb85c;
+        }
+
+        .sentiment-mixed {
+            color: #f0ad4e;
+        }
+
+        .sentiment-negative {
+            color: #d9534f;
+        }
+
+        .trends-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .trend-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(102, 192, 244, 0.2);
+        }
+
+        .trend-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .trend-item:last-child {
+            border-bottom: none;
+        }
+
+        .trend-name {
+            color: #c7d5e0;
+        }
+
+        .trend-count {
+            color: #66c0f4;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #66c0f4;
+        }
+
+        .error {
+            background: rgba(217, 83, 79, 0.2);
+            border: 1px solid #d9534f;
+            color: #d9534f;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5cb85c, #66c0f4);
+            transition: width 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .updating {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Steam Game Trends Dashboard</h1>
+            <p>Live sentiment analysis and trend tracking for top Steam games</p>
+            <p class="last-updated">Last Updated: <span id="timestamp">Loading...</span></p>
+            <p class="last-updated">Auto-refresh: <span id="countdown">60</span>s</p>
+        </header>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total Players Online</div>
+                <div class="stat-value" id="totalPlayers">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Games Tracked</div>
+                <div class="stat-value" id="totalGames">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Average Sentiment</div>
+                <div class="stat-value" id="avgSentiment">-</div>
+            </div>
+        </div>
+
+        <div class="games-container">
+            <h2>Top Games by Player Count</h2>
+            <div id="gamesContent" class="loading">
+                Loading game data...
+            </div>
+        </div>
+
+        <div class="games-container">
+            <h2>Trend Analysis</h2>
+            <div class="trends-section" id="trendsContent">
+                <div class="loading">Analyzing trends...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let countdownInterval;
+        let refreshInterval;
+        let countdown = 60; // Refresh every 60 seconds
+
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                if (!response.ok) throw new Error('Failed to fetch data');
+                
+                const data = await response.json();
+                updateDashboard(data);
+                
+                // Reset countdown
+                countdown = 60;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('gamesContent').innerHTML = 
+                    `<div class="error">Error loading data: ${error.message}. Retrying...</div>`;
+            }
+        }
+
+        function updateDashboard(data) {
+            // Update timestamp
+            document.getElementById('timestamp').textContent = data.timestamp;
+
+            // Update stats
+            document.getElementById('totalPlayers').textContent = 
+                data.trends.total_players.toLocaleString();
+            document.getElementById('totalGames').textContent = data.total_games;
+            
+            // Calculate average sentiment
+            const avgSentiment = data.games.reduce((sum, g) => sum + g.sentiment_ratio, 0) / data.games.length;
+            document.getElementById('avgSentiment').textContent = avgSentiment.toFixed(1) + '%';
+
+            // Update games
+            const gamesHTML = data.games.map(game => {
+                const sentimentClass = getSentimentClass(game.sentiment_ratio);
+                return `
+                    <div class="game-card">
+                        <div class="game-header">
+                            <div class="game-rank">#${game.rank}</div>
+                            <div class="game-name">${game.name}</div>
+                        </div>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <div class="game-stat-label">Current Players</div>
+                                <div class="game-stat-value">${game.concurrent_players.toLocaleString()}</div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-label">Sentiment Score</div>
+                                <div class="game-stat-value ${sentimentClass}">
+                                    ${game.sentiment_ratio}%
+                                </div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-label">Reviews Analyzed</div>
+                                <div class="game-stat-value">${game.review_count}</div>
+                            </div>
+                            <div class="game-stat">
+                                <div class="game-stat-label">Overall Sentiment</div>
+                                <div class="game-stat-value ${sentimentClass}">
+                                    ${game.sentiment_label}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${game.sentiment_ratio}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('gamesContent').innerHTML = gamesHTML;
+
+            // Update trends
+            const trendsHTML = `
+                <div class="trend-card">
+                    <h3>Top Genres</h3>
+                    ${data.trends.top_genres.map(([genre, count]) => `
+                        <div class="trend-item">
+                            <span class="trend-name">${genre}</span>
+                            <span class="trend-count">${count}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="trend-card">
+                    <h3>Top Categories</h3>
+                    ${data.trends.top_categories.map(([category, count]) => `
+                        <div class="trend-item">
+                            <span class="trend-name">${category}</span>
+                            <span class="trend-count">${count}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('trendsContent').innerHTML = trendsHTML;
+        }
+
+        function getSentimentClass(ratio) {
+            if (ratio >= 60) return 'sentiment-positive';
+            if (ratio >= 40) return 'sentiment-mixed';
+            return 'sentiment-negative';
+        }
+
+        function updateCountdown() {
+            countdown--;
+            document.getElementById('countdown').textContent = countdown;
+            
+            if (countdown <= 0) {
+                fetchData();
+            }
+        }
+
+        // Initial load
+        fetchData();
+
+        // Set up auto-refresh
+        countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
